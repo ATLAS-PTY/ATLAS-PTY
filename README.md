@@ -1,27 +1,18 @@
 # Hola, soy José Castillo 👋
 
-**Fundador de GlobalTrackExpress** (Panamá) — logística, rastreo GPS y videovigilancia para empresas.
-Estoy construyendo mi segunda línea: **ciberseguridad**, desde cero y con práctica real en mi propio laboratorio.
+Fundador de **GlobalTrackExpress**. Especialista en **ciberseguridad ofensiva** y **bug bounty hunter**.
 
-## 🎓 Credenciales verificadas
-- Cisco NetAcad — Introduction to Cybersecurity · Networking Basics · Networking Devices and Initial Configuration
-- OPSWAT — Cybersecurity Fundamentals Associate (OCFA) · Introduction to Critical Infrastructure Protection (ICIP)
-- Insignias públicas: https://www.credly.com/users/josecastillo.pty
-- Portafolio completo: https://cyber-profile.com/u/josecastillo
-
-## 🔬 Mi laboratorio (ATLAS Lab)
-- PC Debian propia con 27 herramientas verificadas: OSINT (Sherlock, SpiderFoot, Mr.Holmes), escaneo (Nmap, RustScan, Amass, Nuclei), inteligencia (MISP), forense (Hayabusa, Velociraptor) y agentes de IA locales con Ollama.
-- Práctica legal únicamente: mi laboratorio, Hack The Box y programas autorizados de bug bounty (Bugcrowd / HackerOne).
-- Regla de oro: nada sin autorización escrita y alcance definido.
+Mi GitHub contiene los proyectos y herramientas de mi trabajo en seguridad ofensiva: búsqueda de vulnerabilidades en programas autorizados y servicios de protección para empresas, siempre con autorización y alcance definido.
 
 ## 📂 Proyectos
-- **equipo-agentes** — kit local de agentes de IA (Director + nodos + Auditor) con memoria compartida y modelos locales.
-- **bug-bounty-kit** — guías y práctica de bug bounty (recon de OWASP Juice Shop con Nuclei).
-- **kali-lab** — laboratorio de hacking ético con Kali Linux en Docker.
+- **equipo-agentes** — sistema de agentes de IA para automatizar análisis y documentación de seguridad.
+- **bug-bounty-kit** — metodología y guías profesionales para la búsqueda de vulnerabilidades.
+- **kali-lab** — entorno de práctica y pruebas de seguridad ofensiva.
 
-## 📫 Contacto
+## 🌐 Contacto
 - Negocio: https://globaltrackexpress.com
 - LinkedIn: https://www.linkedin.com/in/joseecastillo
-## ☕ Apoya mi trabajo
+- Portafolio: https://cyber-profile.com/u/josecastillo
+
+## ☕ Apoya mis proyectos
 Si mi contenido te sirve, invítame un café: https://buymeacoffee.com/josecastillo
-Tu apoyo mantiene vivo el laboratorio ATLAS y la creación de contenido de ciberseguridad desde cero.
