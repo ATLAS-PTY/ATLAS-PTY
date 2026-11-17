@@ -22,3 +22,6 @@ Estoy construyendo mi segunda línea: **ciberseguridad**, desde cero y con prác
 ## 📫 Contacto
 - Negocio: https://globaltrackexpress.com
 - LinkedIn: https://www.linkedin.com/in/joseecastillo
+## ☕ Apoya mi trabajo
+Si mi contenido te sirve, invítame un café: https://buymeacoffee.com/josecastillo
+Tu apoyo mantiene vivo el laboratorio ATLAS y la creación de contenido de ciberseguridad desde cero.
