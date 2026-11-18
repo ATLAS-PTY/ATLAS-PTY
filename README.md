@@ -12,9 +12,7 @@ Mi GitHub contiene los proyectos y herramientas de mi trabajo en seguridad ofens
 
 ## 📂 Proyectos
 
-- **equipo-agentes** — sistema de agentes de IA para automatizar análisis y documentación de seguridad.
-- **bug-bounty-kit** — metodología y guías profesionales para la búsqueda de vulnerabilidades.
-- **kali-lab** — entorno de práctica y pruebas de seguridad ofensiva.
+Los proyectos se anuncian aquí cuando están terminados y probados.
 
 ## 🌐 Contacto
 
