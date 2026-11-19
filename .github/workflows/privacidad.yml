@@ -6,7 +6,8 @@ name: Privacidad
 # correo, IP, cédula, teléfono o secreto sigue haciendo fallar el workflow.
 # También se excluyen los dominios reservados de ejemplo (example.com, example.org,
 # example.net), que son marcadores de posición de los cursos, no correos reales.
-# Los patrones usan límites de palabra para no confundir UUID y versiones con cédula o IP.
+# Los patrones de cédula y teléfono usan lookaround (grep -P) para no confundir
+# los segmentos de los UUID de las imágenes con una cédula o un teléfono.
 
 on:
   push:
@@ -25,7 +26,7 @@ jobs:
         run: |
           set -eu
           echo "Revisando IPs, correos personales, cédula, teléfonos y secretos..."
-          grep -RInE --exclude-dir=.git --exclude-dir=node_modules --exclude=privacidad.yml -e "\b[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\b" -e "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b" -e "\b[0-9]{1,2}-[0-9]{3,4}-[0-9]{3,5}\b" -e "\+507[ -]?[67][0-9]{3}[ -]?[0-9]{4}\b" -e "\b[67][0-9]{3}-[0-9]{4}\b" -e "ghp_[A-Za-z0-9]{20,}" -e "github_pat_[A-Za-z0-9_]{20,}" -e "gho_[A-Za-z0-9]{20,}" -e "AKIA[0-9A-Z]{16}" -e "BEGIN.*PRIVATE KEY" . > /tmp/hallazgos.txt || true
+          grep -RInP --exclude-dir=.git --exclude-dir=node_modules --exclude=privacidad.yml -e '\b(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}\b' -e '\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b' -e '(?<![0-9A-Za-z-])[0-9]{1,2}-[0-9]{3,4}-[0-9]{3,5}(?![0-9A-Za-z-])' -e '\+507[ -]?[67][0-9]{3}[ -]?[0-9]{4}\b' -e '(?<![0-9A-Za-z-])[67][0-9]{3}-[0-9]{4}(?![0-9A-Za-z-])' -e 'ghp_[A-Za-z0-9]{20,}' -e 'github_pat_[A-Za-z0-9_]{20,}' -e 'gho_[A-Za-z0-9]{20,}' -e 'AKIA[0-9A-Z]{16}' -e 'BEGIN.*PRIVATE KEY' . > /tmp/hallazgos.txt || true
           grep -v -e 'atencionAI@outlook\.com' -e '@example\.com' -e '@example\.org' -e '@example\.net' /tmp/hallazgos.txt > /tmp/hallazgos_filtrados.txt || true
           if [ -s /tmp/hallazgos_filtrados.txt ]; then
             echo "Hallazgos:"
