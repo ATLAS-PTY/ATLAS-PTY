@@ -44,7 +44,7 @@ Equipo rojo y equipo azul, todo conectado por MCP, listo para operar.
 Ruta ATLAS: Bugcrowd → HackerOne → YesWeHack → Intigriti.
 
 - **Bugcrowd** — trabajo activo. Skyscanner (primer programa que paga) y NASA VDP.
-- **HackerOne** — cuenta josecastillo-pty.
+ - **HackerOne** — cuenta [josecastillo-pty](https://hackerone.com/josecastillo-pty).
 - **YesWeHack** — cuenta activada.
 
 ## 📚 Libros
