@@ -14,7 +14,7 @@ Los proyectos se anuncian aquí cuando están terminados y probados.
 
 - **atlas-lab** — laboratorio privado de caza de bug bounty: método ATLAS, actas y evidencia.
 - **kali-lab** — entorno atacante (Kali) del laboratorio.
-- **qwen-atlas** — modelo propio de IA para el laboratorio, con ciclo de entrenamiento en GitHub Actions.
+- [**qwen-atlas**](https://github.com/ATLAS-PTY/atlas-lab/actions/workflows/entrenamiento.yml) — modelo propio de IA para el laboratorio, con ciclo de entrenamiento en GitHub Actions.
 
 ## 🧪 Laboratorio
 
