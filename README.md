@@ -18,17 +18,17 @@ Los proyectos se anuncian aquí cuando están terminados y probados.
 
 ## 🧪 Laboratorio
 
-Equipo rojo y equipo azul, todo conectado por MCP, listo para operar.
+Laboratorio privado de ciberseguridad ofensiva y defensiva: equipo rojo (caza de vulnerabilidades en programas autorizados) y equipo azul (defensa y monitoreo).
 
-- **Rojo** ataca: kali-lab, prácticas de laboratorio, método ATLAS de caza.
-- **Azul** defiende: centinela azul (SOC del laboratorio).
-- **Práctica n.º 3 completada:** BOLA en VAmPI — ciclo registro → lectura confirmado.
-- **Método:** `metodo/metodo-caza-bugbounty.md` en atlas-lab.
+ 
+ 
+ 
+ 
 
 ## 🤖 IA
 
-- **Qwen-Atlas** — modelo propio (Qwen) con ciclo de entrenamiento cada 6 horas.
-- **Ollama local** — modelo qwen3 en local, sin depender de APIs de pago.
+- **Qwen-Atlas** — modelo propio para el laboratorio.
+ 
 - **USAP + PentAGI** — agentes autónomos de seguridad y threat hunting con IA.
 
 ## 🛠️ Herramientas
@@ -47,25 +47,25 @@ Ruta ATLAS: Bugcrowd → HackerOne → YesWeHack → Intigriti.
  - **HackerOne** — cuenta [josecastillo-pty](https://hackerone.com/josecastillo-pty).
 - **YesWeHack** — cuenta activada.
 
-## 📚 Libros
+ 
 
-Serie Biblioteca — en preparación.
+ 
 
 ## 🎓 Cursos y certificaciones
 
 - **OPSWAT ICIP** — completado 100% (certificado paZt5da78w).
 - **OPSWAT OCFA** — completado 100%, examen final 90% (certificado pAMj6ied3w).
 - **Diplomados Aprende.org** — Técnico en sistemas informáticos, Técnico en integridad web.
-- **Cola de certificaciones:** Cisco (en curso), IBM SkillsBuild, Fortinet NSE 1–3, Google Cybersecurity, Linux Foundation LFS101.
+ 
 
-## 🖥️ Servidores
+ 
 
-Por rol, sin direcciones:
+ 
 
-- **Laboratorio en la nube** — Codespace (Debian + Kali).
-- **Atacante** — contenedor kali-lab.
-- **Defensa** — centinela azul (SOC).
-- **IA** — Qwen-Atlas y Ollama local.
+ 
+ 
+ 
+ 
 
 ## 🌐 Contacto
 
