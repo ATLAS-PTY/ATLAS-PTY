@@ -1,0 +1,24 @@
+name: Privacidad
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  privacidad:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Revisar el código
+        uses: actions/checkout@v4
+      - name: Revisar datos personales y secretos
+        run: |
+          set -eu
+          echo "Revisando IPs, correos personales, cédula, teléfonos y secretos..."
+          if grep -RInE --exclude-dir=.git --exclude-dir=node_modules --exclude=privacidad.yml -e "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" -e "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}" -e "[0-9]{1,2}-[0-9]{3,4}-[0-9]{3,5}" -e "507[ -]?[67][0-9]{3}[ -]?[0-9]{4}" -e "[67][0-9]{3}-[0-9]{4}" -e "ghp_[A-Za-z0-9]{20,}" -e "github_pat_[A-Za-z0-9_]{20,}" -e "gho_[A-Za-z0-9]{20,}" -e "AKIA[0-9A-Z]{16}" -e "BEGIN.*PRIVATE KEY" . ; then
+            echo "::error::Se encontraron datos personales o secretos. Revisa la salida y eliminalos antes de publicar."
+            exit 1
+          fi
+          echo "Sin hallazgos: no se detectaron IPs, correos, cédula, teléfonos ni secretos."
