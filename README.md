@@ -4,9 +4,7 @@
 
 Especialista en **ciberseguridad ofensiva** y **bug bounty hunter** 🇵🇦
 
-![Ciberseguridad Ofensiva](https://img.shields.io/badge/Ciberseguridad-Ofensiva-0e75b6?style=for-the-badge)
-![Bug Bounty](https://img.shields.io/badge/Bug-Bounty-111111?style=for-the-badge)
-![Panamá](https://img.shields.io/badge/Base-Panamá-0071bc?style=for-the-badge)
+<img src="assets/badge-ofensiva.png" alt="Ciberseguridad Ofensiva" height="28"/> <img src="assets/badge-bugbounty.png" alt="Bug Bounty" height="28"/> <img src="assets/badge-panama.png" alt="Panamá" height="28"/>
 
 Mi GitHub contiene los proyectos y herramientas de mi trabajo en seguridad ofensiva: búsqueda de vulnerabilidades en programas autorizados, siempre con autorización y alcance definido.
 
@@ -14,24 +12,70 @@ Mi GitHub contiene los proyectos y herramientas de mi trabajo en seguridad ofens
 
 Los proyectos se anuncian aquí cuando están terminados y probados.
 
+- **atlas-lab** — laboratorio privado de caza de bug bounty: método ATLAS, actas y evidencia.
+- **kali-lab** — entorno atacante (Kali) del laboratorio.
+- **qwen-atlas** — modelo propio de IA para el laboratorio, con ciclo de entrenamiento en GitHub Actions.
+
+## 🧪 Laboratorio
+
+Equipo rojo y equipo azul, todo conectado por MCP, listo para operar.
+
+- **Rojo** ataca: kali-lab, prácticas de laboratorio, método ATLAS de caza.
+- **Azul** defiende: centinela azul (SOC del laboratorio).
+- **Práctica n.º 3 completada:** BOLA en VAmPI — ciclo registro → lectura confirmado.
+- **Método:** `metodo/metodo-caza-bugbounty.md` en atlas-lab.
+
+## 🤖 IA
+
+- **Qwen-Atlas** — modelo propio (Qwen) con ciclo de entrenamiento cada 6 horas.
+- **Ollama local** — modelo qwen3 en local, sin depender de APIs de pago.
+- **USAP + PentAGI** — agentes autónomos de seguridad y threat hunting con IA.
+
+## 🛠️ Herramientas
+
+- **OSINT:** Sherlock, SpiderFoot, Mr.Holmes, OsintHunter, MISP.
+- **Red team:** RustScan, Amass, PentAGI, Hexstrike.
+- **Blue team / SOC:** Velociraptor, TheHive, Hayabusa, SentinelSOC.
+- **IA y automatización:** USAP, HaxBox, cybersec-toolkit.
+- **Kali:** nmap, sqlmap, nikto, hydra, nuclei, subfinder, ffuf.
+
+## 🎯 Bug bounty
+
+Ruta ATLAS: Bugcrowd → HackerOne → YesWeHack → Intigriti.
+
+- **Bugcrowd** — trabajo activo. Skyscanner (primer programa que paga) y NASA VDP.
+- **HackerOne** — cuenta josecastillo-pty.
+- **YesWeHack** — cuenta activada.
+
+## 📚 Libros
+
+Serie Biblioteca — en preparación.
+
+## 🎓 Cursos y certificaciones
+
+- **OPSWAT ICIP** — completado 100% (certificado paZt5da78w).
+- **OPSWAT OCFA** — completado 100%, examen final 90% (certificado pAMj6ied3w).
+- **Diplomados Aprende.org** — Técnico en sistemas informáticos, Técnico en integridad web.
+- **Cola de certificaciones:** Cisco (en curso), IBM SkillsBuild, Fortinet NSE 1–3, Google Cybersecurity, Linux Foundation LFS101.
+
+## 🖥️ Servidores
+
+Por rol, sin direcciones:
+
+- **Laboratorio en la nube** — Codespace (Debian + Kali).
+- **Atacante** — contenedor kali-lab.
+- **Defensa** — centinela azul (SOC).
+- **IA** — Qwen-Atlas y Ollama local.
+
 ## 🌐 Contacto
 
 - Portafolio: https://cyber-profile.com/u/josecastillo
 - LinkedIn: https://www.linkedin.com/in/joseecastillo
 - YouTube: https://www.youtube.com/@JoseCastillo_pty
 
-## 💳 Pagos y apoyo
+## ☕ Apoya mis proyectos
 
-¿Contratas un servicio o apoyas mis proyectos? Paga directo y seguro:
-
-- **PayPal:** https://www.paypal.com/paypalme/GlobaltrackExpress
 - **Buy Me a Coffee:** https://buymeacoffee.com/josecastillo
 - **GitHub Sponsors:** botón «Sponsor» en este perfil
-
-| PayPal (QR) | Binance Pay (QR) |
-|---|---|
-| <img src="assets/qr-paypal.png" alt="QR de PayPal" width="180"/> | <img src="assets/qr-binance.jpg" alt="QR de Binance Pay" width="180"/> |
-
-## ☕ Apoya mis proyectos
 
 Si mi contenido te sirve, invítame un café: https://buymeacoffee.com/josecastillo
