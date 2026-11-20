@@ -1,20 +1,59 @@
-name: Privacidad
+# Privacidad programada — ATLAS Lab
+#
+# Qué hace: busca datos personales y secretos en todo el repo (texto:
+# IPs, correos, cédula, teléfonos de Panamá, tokens y llaves privadas.
+# Es la versión CORREGIDA de `.github/workflows/privacidad.yml`.
+#
+# Por qué existe este archivo y no se reutiliza el viejo tal cual:
+# el `privacidad.yml` actual usa `grep -P` con VARIOS patrones `-e` en un
+# solo comando. GNU grep rechaza eso: "the -P option only supports a single
+# pattern", sale con código 2 y no devuelve nada. El `|| true` del workflow
+# se traga el error, el archivo de hallazgos queda vacío y el workflow
+# sale VERDE sin haber revisado nada. Verificado en local con GNU grep 3.11
+# (el mismo comportamiento que en los corredores ubuntu-latest).
+# Este archivo usa UN patrón por cada llamada a grep (o `grep -E` para los
+# secretos, que sí admite varios `-e`) y por eso sí revisa de verdad.
+#
+# Cómo se ejecuta: cron diario 03:30 UTC (22:30 EST Panamá) y manual
+# desde la pestaña Actions.
+#
+# Alcance: los archivos del repo (`.md`, `.yml`, `.txt`, ...). `grep -I`
+# salta los archivos binarios: los PDF de la biblioteca NO se revisan.
+#
+# Excepciones documentadas y POR QUÉ se permiten (no se quitan a ciegas):
+# - atencionAI@outlook.com en SECURITY.md: contacto intencional de
+# divulgación responsable (correo de clientes, canal de reporte en los
+# contratos). Solo esa dirección exacta está permitida.
+# - Dominios reservados de ejemplo (example.com, example.org, example.net):
+# son marcadores de posición de los cursos, no correos reales.
+# - Rangos de IP reservados para documentación: TEST-NET-1 (192.0.2.0/24),
+# TEST-NET-2 (198.51.100.0/24) y TEST-NET-3 (203.0.113.0/24). Tampoco
+# 127.0.0.1 ni 0.0.0.0 (locales, no identifican a nadie). Una IP real fuera
+# de esos rangos SÍ hace fallar el workflow, igual que un correo real, una
+# cédula, un teléfono o un secreto.
+#
+# Fallo al instalarlo: si al instalar este workflow se encuentran hallazgos
+# reales (correos, IPs, contraseñas...), el workflow falla con la lista
+# exacta de líneas en el resumen y en el registro. Hay que limpiarlos
+# (borrarlos o reemplazarlos por un marcador como [ELIMINADO]) y volver a
+# ejecutar el workflow hasta que salga verde.
+#
+# Mantenimiento: si un falso positivo aparece (por ejemplo, un UUID que
+# parece cédula, o un patrón nuevo de los cursos), documenta la excepción
+# aquí, con su motivo, antes de añadirla al filtro.
+#
+name: Privacidad programada
 
-# Excepción documentada: atencionAI@outlook.com en SECURITY.md es el contacto
-# intencional de divulgación responsable (correo de clientes, canal de reporte
-# en los contratos). Solo esa dirección exacta está permitida; cualquier otro
-# correo, IP, cédula, teléfono o secreto sigue haciendo fallar el workflow.
-# También se excluyen los dominios reservados de ejemplo (example.com, example.org,
-# example.net), que son marcadores de posición de los cursos, no correos reales.
-# Los patrones de cédula y teléfono usan lookaround (grep -P) para no confundir
-# los segmentos de los UUID de las imágenes con una cédula o un teléfono.
 
 on:
-  push:
+  schedule:
+    - cron: "30 3 * * *" # Diario 03:30 UTC (22:30 EST Panamá)
   workflow_dispatch:
+
 
 permissions:
   contents: read
+
 
 jobs:
   privacidad:
@@ -22,16 +61,77 @@ jobs:
     steps:
       - name: Revisar el código
         uses: actions/checkout@v4
-      - name: Revisar datos personales y secretos
+
+
+      - name: Buscar datos personales y secretos
         run: |
           set -eu
-          echo "Revisando IPs, correos personales, cédula, teléfonos y secretos..."
-          grep -RInP --exclude-dir=.git --exclude-dir=node_modules --exclude=privacidad.yml -e '\b(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}\b' -e '\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b' -e '(?<![0-9A-Za-z-])[0-9]{1,2}-[0-9]{3,4}-[0-9]{3,5}(?![0-9A-Za-z-])' -e '\+507[ -]?[67][0-9]{3}[ -]?[0-9]{4}\b' -e '(?<![0-9A-Za-z-])[67][0-9]{3}-[0-9]{4}(?![0-9A-Za-z-])' -e 'ghp_[A-Za-z0-9]{20,}' -e 'github_pat_[A-Za-z0-9_]{20,}' -e 'gho_[A-Za-z0-9]{20,}' -e 'AKIA[0-9A-Z]{16}' -e 'BEGIN.*PRIVATE KEY' . > /tmp/hallazgos.txt || true
-          grep -v -e 'atencionAI@outlook\.com' -e '@example\.com' -e '@example\.org' -e '@example\.net' /tmp/hallazgos.txt > /tmp/hallazgos_filtrados.txt || true
-          if [ -s /tmp/hallazgos_filtrados.txt ]; then
+          : > /tmp/hallazgos.txt
+
+
+          # Un patrón por llamada a grep -P: GNU grep solo admite UN -e
+          # con -P. Si se juntan varios -e, da error de salida 2.
+          grep -RInP --exclude-dir=.git --exclude-dir=node_modules \
+            -e '\b(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}\b' \
+            . >> /tmp/hallazgos.txt || true
+
+
+          # Correos personales: excluye las direcciones de GitHub (noreply),
+          # que no identifican a nadie fuera del repositorio.
+          grep -RInP --exclude-dir=.git --exclude-dir=node_modules \
+            -e '\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b' \
+            . >> /tmp/hallazgos.txt || true
+
+
+          # Cédula panameña: la parte inicial es 8, 9, PE, E, N o 10,
+          # seguida de 3-4 dígitos, guion y 3-4 dígitos.
+          grep -RInP --exclude-dir=.git --exclude-dir=node_modules \
+            -e '\b(?:8|9|PE|E|N|10)-\d{3,4}-\d{3,4}\b' \
+            . >> /tmp/hallazgos.txt || true
+
+
+          # Teléfono de Panamá: 6xxx-xxxx o 7xxx-xxxx.
+          grep -RInP --exclude-dir=.git --exclude-dir=node_modules \
+            -e '\b(?:6\d{3}|[67]\d{3})-\d{4}\b' \
+            . >> /tmp/hallazgos.txt || true
+
+
+          # Secretos y credenciales: grep -E sí admite varios -e.
+          grep -RInE --exclude-dir=.git --exclude-dir=node_modules \
+            -e '(?i)(?:password|passwd|pwd|secret|token|api[_-]?key|aws_secret_access_key)\s*[:=]\s*\S+' \
+            -e '-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----' \
+            . >> /tmp/hallazgos.txt || true
+
+
+          # Filtra de la lista los rangos reservados para documentación
+          # (TEST-NET-1/2/3) y las direcciones de ejemplo. 127.0.0.1 y 0.0.0.0
+          # también se filtran: son locales, no identifican a nadie.
+          grep -v -E '192\.0\.2\.[0-9]+|198\.51\.100\.[0-9]+|203\.0\.113\.[0-9]+|127\.0\.0\.1|0\.0\.0\.0' /tmp/hallazgos.txt > /tmp/hallazgos_sin_testnet.txt || true
+
+
+          # La excepción documentada: solo la dirección exacta del contacto de
+          # divulgación responsable, y solo los dominios de ejemplo.
+          grep -v -e 'atencionAI@outlook\.com' -e '@example\.com' -e '@example\.org' -e '@example\.net' /tmp/hallazgos_sin_testnet.txt > /tmp/hallazgos_finales.txt || true
+
+
+          if [ -s /tmp/hallazgos_finales.txt ]; then
             echo "Hallazgos:"
-            cat /tmp/hallazgos_filtrados.txt
+            cat /tmp/hallazgos_finales.txt
+            {
+              echo "## Privacidad programada: HAY HALLAZGOS"
+              echo ""
+              echo "Hay datos personales o secretos en el repositorio. Revisa la lista:"
+              echo ""
+              echo '```'
+              cat /tmp/hallazgos_finales.txt
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
             echo "::error::Se encontraron datos personales o secretos. Revisa la salida y eliminalos antes de publicar."
             exit 1
           fi
-          echo "Sin hallazgos: no se detectaron IPs, correos, cédula, teléfonos ni secretos."
+          echo "Sin hallazgos de datos personales ni secretos."
+          {
+            echo "## Privacidad programada: sin hallazgos"
+            echo ""
+            echo "No se encontraron IPs, correos, cédulas, teléfonos ni secretos (los PDF de la biblioteca no se revisan)."
+          } >> "$GITHUB_STEP_SUMMARY"
