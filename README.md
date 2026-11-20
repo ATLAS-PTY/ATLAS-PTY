@@ -1,3 +1,5 @@
+<img src="banner-kali-linux-cyberprofile-4k-v5.png" alt="Kali Linux banner" width="100%"/>
+
 <img src="assets/banner-atlas.png" alt="ATLAS — Ciberseguridad" width="100%"/>
 
 # Hola, soy José Castillo 👋
