@@ -31,6 +31,17 @@
 # 127.0.0.1 ni 0.0.0.0 (locales, no identifican a nadie). Una IP real fuera
 # de esos rangos SÍ hace fallar el workflow, igual que un correo real, una
 # cédula, un teléfono o un secreto.
+# - Rangos privados RFC 1918 (10/8, 172.16/12, 192.168/16): no son
+# públicos ni identifican a nadie fuera de la red local. 192.168.1.1 se
+# usa además como ejemplo en la documentación.
+# - Direcciones @users.noreply.github.com: las genera GitHub al hacer
+# commits y no identifican a nadie fuera del repositorio. El paso de
+# correos ya las daba por excluidas; aquí se aplica el filtro que faltaba.
+# - Números de versión con 4 partes: parecen una IP pero son la versión
+# del programa. Solo se filtran en su contexto: los metadatos de
+# productor de los PDF (PDFKit.NET) y las columnas de versión de las
+# tablas de inventario (| 1.8.0.0 |). Una IP real fuera de esos
+# contextos SÍ hace fallar el workflow.
 #
 # Fallo al instalarlo: si al instalar este workflow se encuentran hallazgos
 # reales (correos, IPs, contraseñas...), el workflow falla con la lista
@@ -104,26 +115,34 @@ jobs:
 
 
           # Filtra de la lista los rangos reservados para documentación
-          # (TEST-NET-1/2/3) y las direcciones de ejemplo. 127.0.0.1 y 0.0.0.0
-          # también se filtran: son locales, no identifican a nadie.
-          grep -v -E '192\.0\.2\.[0-9]+|198\.51\.100\.[0-9]+|203\.0\.113\.[0-9]+|127\.0\.0\.1|0\.0\.0\.0' /tmp/hallazgos.txt > /tmp/hallazgos_sin_testnet.txt || true
+          # (TEST-NET-1/2/3), los rangos privados RFC 1918 y las
+          # direcciones de ejemplo. 127.0.0.1 y 0.0.0.0 también se
+          # filtran: son locales, no identifican a nadie.
+          grep -v -E '192\.0\.2\.[0-9]+|198\.51\.100\.[0-9]+|203\.0\.113\.[0-9]+|127\.0\.0\.1|0\.0\.0\.0|10\.[0-9]+\.[0-9]+\.[0-9]+|172\.(1[6-9]|2[0-9]|3[0-1])\.[0-9]+\.[0-9]+|192\.168\.[0-9]+\.[0-9]+' /tmp/hallazgos.txt > /tmp/hallazgos_sin_testnet.txt || true
 
 
           # La excepción documentada: solo la dirección exacta del contacto de
-          # divulgación responsable, y solo los dominios de ejemplo.
-          grep -v -e 'atencionAI@outlook\.com' -e '@example\.com' -e '@example\.org' -e '@example\.net' /tmp/hallazgos_sin_testnet.txt > /tmp/hallazgos_finales.txt || true
+          # divulgación responsable, los dominios de ejemplo y las
+          # direcciones noreply que genera GitHub.
+          grep -v -e 'atencionAI@outlook\.com' -e '@example\.com' -e '@example\.org' -e '@example\.net' -e '@users\.noreply\.github\.com' /tmp/hallazgos_sin_testnet.txt > /tmp/hallazgos_finales.txt || true
 
 
-          if [ -s /tmp/hallazgos_finales.txt ]; then
+          # Números de versión con 4 partes: parecen una IP pero son la
+          # versión del programa (PDFKit.NET en los metadatos de los PDF,
+          # o la columna de versión de una tabla de inventario).
+          grep -v -E 'PDFKit\.NET [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+|[|] [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ [|]' /tmp/hallazgos_finales.txt > /tmp/hallazgos_limpios.txt || true
+
+
+          if [ -s /tmp/hallazgos_limpios.txt ]; then
             echo "Hallazgos:"
-            cat /tmp/hallazgos_finales.txt
+            cat /tmp/hallazgos_limpios.txt
             {
               echo "## Privacidad programada: HAY HALLAZGOS"
               echo ""
               echo "Hay datos personales o secretos en el repositorio. Revisa la lista:"
               echo ""
               echo '```'
-              cat /tmp/hallazgos_finales.txt
+              cat /tmp/hallazgos_limpios.txt
               echo '```'
             } >> "$GITHUB_STEP_SUMMARY"
             echo "::error::Se encontraron datos personales o secretos. Revisa la salida y eliminalos antes de publicar."
